@@ -1,28 +1,42 @@
-<template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+<template lang="html">
+  <div class="site">
+    <navbar />
+    <section class="section site-content">
+      <div class="container is-fluid">
+        <router-view></router-view>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import navbar from './components/navbar'
+import router from './router'
+import store from './store'
 
 export default {
   name: 'app',
+  router: router,
   components: {
-    HelloWorld
+    navbar: navbar,
+  },
+  store: store,
+  metaInfo: {
+    // if no subcomponents specify a metaInfo.title, this title will be used
+    title: 'Default Title',
+    // all titles will be injected into this template
+    titleTemplate: '%s | Sipmle Cloud Inventory Tool'
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.site{
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+.site-content{
+  flex: 1;
 }
 </style>
