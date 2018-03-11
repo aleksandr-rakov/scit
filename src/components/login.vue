@@ -8,18 +8,23 @@
               Авторизация
             </h1>
             <div class="box">
-              <label class="label">Логин</label>
-              <p class="control">
-                <input class="input" v-model="email" type="text" autofocus required>
-              </p>
-              <label class="label">Пароль</label>
-              <p class="control">
-                <input class="input" v-model="password" type="password" required>
-              </p>
-              <hr>
-              <p class="control">
-                <button class="button is-primary" :class="{'is-loading':busy}">Войти</button>
-              </p>
+              <div class="field">
+                <label class="label">Логин</label>
+                <div class="control">
+                  <input class="input" v-model="email" type="text" autofocus required>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Пароль</label>
+                <div class="control">
+                  <input class="input" v-model="password" type="password" required>
+                </div>
+              </div>
+              <div class="field is-grouped">
+                <div class="control">
+                  <button class="button is-primary" :class="{'is-loading':busy}">Войти</button>
+                </div>
+              </div>
             </div>
             <showerror :error="errors"></showerror>
           </div>

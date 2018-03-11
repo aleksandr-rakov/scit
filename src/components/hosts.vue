@@ -9,11 +9,20 @@
 
     <showerror :error="errors"></showerror>
 
-    <div class="columns" v-for="host in hosts">
+    <div class="columns" v-for="group in hosts">
       <div class="column">
-        <router-link :to="{ path: '/hosts/'+host._id}" v-bind:class="{host_disabled:host.disabled}">
-          {{host.name}}
-        </router-link>
+        <h2>{{group.name||'Нет'}}</h2>
+        <div class="group-level">
+          <div class="columns" v-for="host in group.hosts">
+            <div class="column">
+              <router-link :to="{ path: '/hosts/'+host._id}">
+                {{host.name}}
+              </router-link>
+              {{host.ip}}
+              <div class="host-comment">{{host.comment}}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -37,7 +46,7 @@ export default {
   methods: {
     loadHosts: function () {
       this.errors=null
-      this.axios.get('/api/v1/hosts').then((response) => {
+      this.axios.get('/api/v1/hosts/by_group').then((response) => {
         this.hosts=response.data;
       }, (err) => {
         this.errors=err;
@@ -54,7 +63,12 @@ export default {
 </script>
 
 <style>
-.host_disabled{
-  color: #ccc;
+.host-comment{
+  white-space: pre-wrap;
+  font-size: 12px;
+  line-height: 12px;  
+}
+.group-level{
+  padding-left: 15px;
 }
 </style>

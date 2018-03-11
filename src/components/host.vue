@@ -3,36 +3,45 @@
     <div class="hero-body">
       <div class="container">
         <div class="columns is-vcentered">
-          <div class="column is-4 is-offset-4">
+          <div class="column is-6 is-offset-2">
             <h1 class="title">
               {{create_mode&&'Добаление хоста'||'Редактирование хоста'}}
             </h1>
             <div class="box">
-              <label class="label">name</label>
-              <p class="control">
-                <input class="input" v-model="host.name" type="text" autofocus required>
-              </p>
-              <label class="label">login</label>
-              <p class="control">
-                <input class="input" v-model="host.login" type="text" required>
-              </p>
-              <div v-if="create_mode">
-                <label class="label">Password</label>
-                <p class="control">
-                  <input class="input" v-model="host.password" type="password" required>
-                </p>
+              <div class="field">
+                <label class="label">name</label>
+                <div class="control">
+                  <input class="input" v-model="host.name" type="text" autofocus required>
+                </div>
               </div>
-              <p class="control">
-                <label>
-                  <input class="checkbox" v-model="host.disabled" type="checkbox">
-                  disabled
-                </label>
-              </p>
-              <hr>
-              <p class="control">
-                <button class="button is-primary" :class="{'is-loading':busy}">Сохранить</button>
-                <button class="button is-warning" @click.prevent="remove" v-show="!create_mode">Удалить</button>
-              </p>
+              <div class="field">
+                <label class="label">ip</label>
+                <div class="control">
+                  <input class="input" v-model="host.ip" type="text">
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">group</label>
+                <div class="control">
+                  <v-select taggable push-tags v-model="host.group" :options="host._groups"></v-select>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Comment</label>
+                <div class="control">
+                  <textarea class="textarea" v-model="host.comment"></textarea>
+                </div>
+              </div>
+              
+              
+              <div class="field is-grouped">
+                <div class="control">
+                  <button class="button is-primary" :class="{'is-loading':busy}">Сохранить</button>
+                </div>
+                <div class="control">
+                  <button class="button is-warning" @click.prevent="remove" v-show="!create_mode">Удалить</button>
+                </div>
+              </div>
             </div>
             <showerror :error="errors"></showerror>
           </div>
@@ -56,14 +65,10 @@ export default {
   data () {
     return {
       host:{
-        name: '',
-        login: '',
-        password: '',
-        disabled: false,
       },
       busy: false,
       errors: null,
-      create_mode: false
+      create_mode: false,
     }
   },
   mounted: function () {

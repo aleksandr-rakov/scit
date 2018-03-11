@@ -4,6 +4,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueSweetAlert from 'vue-sweetalert'
 import Meta from 'vue-meta'
+import VueSelect from 'vue-select'
 
 // Require the main Sass manifest file
 require('./assets/main.scss');
@@ -21,6 +22,8 @@ axios.interceptors.request.use(function (config) {
 Vue.use(VueSweetAlert)
 Vue.use(VueAxios, axios)
 Vue.use(Meta)
+Vue.component('v-select', VueSelect)
+
 
 Vue.config.productionTip = false
 

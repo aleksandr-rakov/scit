@@ -3,36 +3,47 @@
     <div class="hero-body">
       <div class="container">
         <div class="columns is-vcentered">
-          <div class="column is-4 is-offset-4">
+          <div class="column is-6 is-offset-2">
             <h1 class="title">
               {{create_mode&&'Добаление пользователя'||'Редактирование пользователя'}}
             </h1>
             <div class="box">
-              <label class="label">name</label>
-              <p class="control">
-                <input class="input" v-model="user.name" type="text" autofocus required>
-              </p>
-              <label class="label">login</label>
-              <p class="control">
-                <input class="input" v-model="user.login" type="text" required>
-              </p>
-              <div v-if="create_mode">
-                <label class="label">Password</label>
-                <p class="control">
-                  <input class="input" v-model="user.password" type="password" required>
-                </p>
+              <div class="field">
+                <label class="label">name</label>
+                <div class="control">
+                  <input class="input" v-model="user.name" type="text" autofocus required>
+                </div>
               </div>
-              <p class="control">
-                <label>
-                  <input class="checkbox" v-model="user.disabled" type="checkbox">
-                  disabled
-                </label>
-              </p>
-              <hr>
-              <p class="control">
-                <button class="button is-primary" :class="{'is-loading':busy}">Сохранить</button>
-                <button class="button is-warning" @click.prevent="change_password" v-show="!create_mode">Изменить пароль</button>
-              </p>
+              <div class="field">
+                <label class="label">login</label>
+                <div class="control">
+                  <input class="input" v-model="user.login" type="text" required>
+                </div>
+              </div>
+              <div class="field" v-if="create_mode">
+                <label class="label">Password</label>
+                <div class="control">
+                  <input class="input" v-model="user.password" type="password" required>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="control">
+                  <label class="checkbox">
+                    <input class="checkbox" v-model="user.disabled" type="checkbox">
+                    disabled
+                  </label>
+                </div>
+              </div>
+
+              <div class="field is-grouped">
+                <div class="control">
+                  <button class="button is-primary" :class="{'is-loading':busy}">Сохранить</button>
+                </div>
+                <div class="control">
+                  <button class="button is-warning" @click.prevent="change_password" v-show="!create_mode">Изменить пароль</button>
+                </div>
+              </div>
             </div>
             <showerror :error="errors"></showerror>
           </div>
