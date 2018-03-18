@@ -4,23 +4,55 @@ import colander
 from pyramid.httpexceptions import HTTPNotFound
 from bson import ObjectId
 from collections import OrderedDict
+import ipaddr
+import re
 
 _collection='hosts'
 
 
 @colander.deferred
-def login_validator(node,kw):
+def ip_validator(node,kw):
     db=kw['db']
-    userid=kw['userid']
+    host_id=kw['host_id']
     def validator(form, value):
-        colander.Length(max=50)(form, value)
-        """Проверяем не занят ли логин"""
-        if db[_collection].find_one({'login':value,'_id':{'$ne':userid}}):
-            raise colander.Invalid(
-                    form, 
-                    u'Этот логин уже зарегистрирован'
-                )
+        iplist_validator(form, value)
+        ips=split_list(value)
+        for ip in ips:
+            if db[_collection].find_one({'ip':ip,'_id':{'$ne':host_id}}):
+                raise colander.Invalid(
+                        form, 
+                        u'Такой IP уже есть'
+                    )
     return validator
+
+def one_ip_validator(node,value):
+    try:
+        ipaddr.IPNetwork(value)
+    except:
+        raise colander.Invalid(
+                node,
+                u'Неверный формат "%s"'%value
+            )
+
+def split_list(text):
+    return re.split('[\s,;,\,]+', text)
+
+def iplist_validator(node,value):
+    ips=split_list(value)
+    for ip in ips:
+        one_ip_validator(node,ip)
+
+def portlist_validator(node,value):
+    ports=split_list(value)
+    for port in ports:
+        try:
+            if int(port)<=0:
+                raise
+        except:
+            raise colander.Invalid(
+                node,
+                u'Неверный формат порта'
+            )
 
 class HostSchema(colander.Schema):
     name = colander.SchemaNode(
@@ -28,7 +60,12 @@ class HostSchema(colander.Schema):
         )
     ip = colander.SchemaNode(
             colander.String(),
-            validator=login_validator,
+            validator=ip_validator,
+        )
+    open_ports = colander.SchemaNode(
+            colander.String(),
+            missing='',
+            validator=portlist_validator
         )
     group = colander.SchemaNode(
             colander.String(),
@@ -79,7 +116,7 @@ class HostsViews(api.BaseViews):
     def view_create(self):
         schema=HostSchema().bind(
                 db=self.db,
-                userid=None
+                host_id=None
             )
         data=self.validated_data(schema)
         self.db[_collection].insert(
@@ -97,7 +134,7 @@ class HostsViews(api.BaseViews):
             raise HTTPNotFound()
         schema=HostSchema().bind(
                 db=self.db,
-                userid=_id
+                host_id=_id
             )
         data=self.validated_data(schema)
         self.db[_collection].update(

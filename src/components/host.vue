@@ -21,6 +21,12 @@
                 </div>
               </div>
               <div class="field">
+                <label class="label">Открытые порты</label>
+                <div class="control">
+                  <input class="input" v-model="host.open_ports" type="text">
+                </div>
+              </div>
+              <div class="field">
                 <label class="label">group</label>
                 <div class="control">
                   <v-select taggable push-tags v-model="host.group" :options="host._groups"></v-select>

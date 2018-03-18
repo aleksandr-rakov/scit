@@ -19,6 +19,11 @@
                 {{host.name}}
               </router-link>
               {{host.ip}}
+
+              <span v-show="host.open_ports">
+                : {{host.open_ports}}
+              </span>
+
               <div class="host-comment">{{host.comment}}</div>
             </div>
           </div>

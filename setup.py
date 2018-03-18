@@ -14,6 +14,7 @@ requires = [
     'waitress',
     'pyramid_jwt',
     'pymongo',
+    'ipaddr',
     ]
 
 tests_require = [
