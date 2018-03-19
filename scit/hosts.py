@@ -6,6 +6,8 @@ from bson import ObjectId
 from collections import OrderedDict
 import ipaddr
 import re
+from pyramid.security import NO_PERMISSION_REQUIRED
+from pyramid.response import Response
 
 _collection='hosts'
 
@@ -155,3 +157,23 @@ class HostsViews(api.BaseViews):
         return {
             'message': u'Хост удален'
         }
+
+
+    @api.view(path='app/hosts', method='GET', permission=NO_PERMISSION_REQUIRED)
+    def view_app_api(self):
+
+        #XXX add check app token here
+
+        q={}
+        group=self.modifers.get('group')
+        if group:
+            q['group']=group
+        
+        hosts=list(self.db[_collection].find(q).sort([('group',1),('name',1)]))
+        result=''
+        for host in hosts:
+            for ip in split_list(host['ip']):
+                result+=u"#%s\n%s\n"%(host['name'],ip)
+
+        return Response(result,content_type='text',charset='utf8')
+

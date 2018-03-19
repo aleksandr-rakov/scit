@@ -9,25 +9,19 @@
 
     <showerror :error="errors"></showerror>
 
-    <div class="columns" v-for="group in hosts">
-      <div class="column">
-        <h2>{{group.name||'Нет'}}</h2>
-        <div class="group-level">
-          <div class="columns" v-for="host in group.hosts">
-            <div class="column">
-              <router-link :to="{ path: '/hosts/'+host._id}">
-                {{host.name}}
-              </router-link>
-              {{host.ip}}
+    <div class="hosts-group" v-for="group in hosts">
+      <h2>{{group.name||'Нет'}}</h2>
+      <div class="hosts-host" v-for="host in group.hosts">
+        <router-link :to="{ path: '/hosts/'+host._id}">
+          {{host.name}}
+        </router-link>
+        {{host.ip}}
 
-              <span v-show="host.open_ports">
-                : {{host.open_ports}}
-              </span>
+        <span v-show="host.open_ports">
+          : {{host.open_ports}}
+        </span>
 
-              <div class="host-comment">{{host.comment}}</div>
-            </div>
-          </div>
-        </div>
+        <div class="host-comment">{{host.comment}}</div>
       </div>
     </div>
 
@@ -71,9 +65,11 @@ export default {
 .host-comment{
   white-space: pre-wrap;
   font-size: 12px;
-  line-height: 12px;  
+  line-height: 12px;
+  margin-left: 10px;
 }
-.group-level{
-  padding-left: 15px;
+.hosts-host{
+  margin-left: 15px;
+  margin-bottom: 15px;
 }
 </style>
