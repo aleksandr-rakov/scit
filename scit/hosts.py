@@ -8,6 +8,7 @@ import ipaddr
 import re
 from pyramid.security import NO_PERMISSION_REQUIRED
 from pyramid.response import Response
+from scit.apps import check_app_auth
 
 _collection='hosts'
 
@@ -104,6 +105,10 @@ class HostsViews(api.BaseViews):
         
         return groupped.values()
 
+    @api.view(path='hosts/_groups', method='GET')
+    def view_get_groups(self):
+        return self.db[_collection].distinct('group')
+
     @api.view(path='hosts/{_id}', method='GET')
     def view_get(self):
         _id=_id=ObjectId(self.params['_id'])
@@ -162,7 +167,7 @@ class HostsViews(api.BaseViews):
     @api.view(path='app/hosts', method='GET', permission=NO_PERMISSION_REQUIRED)
     def view_app_api(self):
 
-        #XXX add check app token here
+        check_app_auth(self.request)
 
         q={}
         group=self.modifers.get('group')
@@ -171,9 +176,17 @@ class HostsViews(api.BaseViews):
         
         hosts=list(self.db[_collection].find(q).sort([('group',1),('name',1)]))
         result=''
+        group_added=False
+        last_group=None
         for host in hosts:
             for ip in split_list(host['ip']):
+                if not group_added or last_group!=host['group']:
+                    if group_added:
+                        result+='\n'
+                    result+=u"#GROUP: %s\n"%(host['group'] or 'NO_GROUP')
+                    last_group=host['group']
+                    group_added=True
+
                 result+=u"#%s\n%s\n"%(host['name'],ip)
 
         return Response(result,content_type='text',charset='utf8')
-

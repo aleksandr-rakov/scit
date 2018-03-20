@@ -82,6 +82,7 @@ export default {
       this.load(this.$route.params.id)
     }else{
       this.create_mode=true
+      this.load_groups()
     }
   },
   methods: {
@@ -92,6 +93,14 @@ export default {
           Vue.set(this,'host',response.data)
         },(error) => {
           this.errors = error
+        })
+    },
+    load_groups () {
+      this.axios.get('/api/v1/hosts/_groups')
+        .then((response) => {
+          Vue.set(this.host,'_groups',response.data)
+        },(error) => {
+          // this.errors = error
         })
     },
     save () {

@@ -8,6 +8,8 @@ import users from './components/users'
 import user from './components/user'
 import hosts from './components/hosts'
 import host from './components/host'
+import apps from './components/apps'
+import app from './components/app'
 
 Vue.use(Router)
 
@@ -50,6 +52,22 @@ const routes = [
     {
       path: '/hosts/:id',
       component: host,
+      meta: { auth: true },
+    },
+
+    {
+      path: '/apps/',
+      component: apps,
+      meta: { auth: true },
+    },
+    {
+      path: '/apps/add',
+      component: app,
+      meta: { auth: true },
+    },
+    {
+      path: '/apps/:id',
+      component: app,
       meta: { auth: true },
     },
     

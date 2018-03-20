@@ -11,11 +11,14 @@
           <router-link class="navbar-item is-brand" to="/">
             Vue Project
           </router-link>
-          <router-link class="navbar-item is-tab" to="/hosts">
+          <router-link class="navbar-item is-tab" to="/hosts" v-show="profile">
             Хосты
           </router-link>
-          <router-link class="navbar-item is-tab" to="/users">
+          <router-link class="navbar-item is-tab" to="/users" v-show="profile">
             Пользователи
+          </router-link>
+          <router-link class="navbar-item is-tab" to="/apps" v-show="profile">
+            Доступ
           </router-link>
         </div>
         <div class="navbar-end">
