@@ -105,9 +105,12 @@ class HostsViews(api.BaseViews):
         
         return groupped.values()
 
+    def get_groups(self):
+        return sorted(self.db[_collection].distinct('group'))
+
     @api.view(path='hosts/_groups', method='GET')
     def view_get_groups(self):
-        return self.db[_collection].distinct('group')
+        return self.get_groups()
 
     @api.view(path='hosts/{_id}', method='GET')
     def view_get(self):
@@ -116,7 +119,7 @@ class HostsViews(api.BaseViews):
         if item is None:
             raise HTTPNotFound()
 
-        item['_groups']=self.db[_collection].distinct('group')
+        item['_groups']=self.get_groups()
         return item
 
     @api.view(path='hosts', method='PUT')
